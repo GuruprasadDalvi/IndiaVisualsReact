@@ -1,23 +1,25 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import IndianMap from './components/IndianMap/IndianMap';
+import { firstTestFunction } from "./Scripts/ColoringFunctions";
 
 function App() {
+
+  const [functionCounter, setFunctionCounter] = React.useState(0)
+
+  const functionHashMap = new Map([
+    [0, NaN],
+    [1, firstTestFunction]
+  ]
+  )
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <IndianMap colorFunction={functionHashMap.get(functionCounter)} />
+      <button onClick={
+        () => {
+          setFunctionCounter((functionCounter + 1)%2)
+        }
+      }>ChangeColor</button>
     </div>
   );
 }
