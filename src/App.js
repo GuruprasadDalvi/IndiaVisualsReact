@@ -13,7 +13,7 @@ function App() {
   ]
   )
   return (
-    <div className="App">
+    <div className="App" >
       <IndianMap colorFunction={functionHashMap.get(functionCounter)} />
       <button onClick={
         () => {
