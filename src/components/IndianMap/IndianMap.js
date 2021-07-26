@@ -4,21 +4,23 @@ import './IndianMap.css';
 
 const IndianMap = (props) => {
 
-  let counter=0
   function componentToHex(c) {
     //This Funcation Retunst hex value of passed integer
     var hex = c.toString(16);
-    return hex.length == 1 ? "0" + hex : hex;
+    return hex.length === 1 ? "0" + hex : hex;
   }
+
+
   function rgbToHex(r, g, b) {
     //This Function Returns hex value of given 
     return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
   }
+
+
   function getColor(idOfSate) {
     //This Function gives color to states 
     if(props.colorFunction){
-      let rgbColor = props.colorFunction.call(this,idOfSate,counter,36)
-      counter=counter+1
+      let rgbColor = props.colorFunction.call(this,(idOfSate))
       return rgbToHex(rgbColor[0],rgbColor[1],rgbColor[2])
     }
     return "#ffba3b"
@@ -219,8 +221,8 @@ const IndianMap = (props) => {
   )
 };
 
-IndianMap.propTypes = {};
+// IndianMap.propTypes = {};
 
-IndianMap.defaultProps = {};
+// IndianMap.defaultProps = {};
 
 export default IndianMap;
