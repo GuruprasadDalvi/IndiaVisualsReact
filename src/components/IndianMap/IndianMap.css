@@ -1,1 +1,6 @@
-.IndianMap {}
+.IndianMap {
+    height: 100px;
+}
+path{
+    transition: 350ms ease-in-out;
+}

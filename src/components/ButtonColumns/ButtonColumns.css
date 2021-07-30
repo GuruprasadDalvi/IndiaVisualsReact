@@ -1,0 +1,9 @@
+.ButtonColumns {
+    display: flex;
+    flex-direction: column;
+    margin-left: 0;
+    left: 0;
+    top: 0;
+    position: fixed;
+    text-align: left;
+}

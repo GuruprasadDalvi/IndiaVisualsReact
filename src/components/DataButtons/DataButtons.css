@@ -1,0 +1,16 @@
+.ButtonStyle {
+    min-width: 400px;
+    min-height: 100px;
+    outline: none;
+    border: none;
+    margin-bottom: 10px;    
+    background-color: rgb(43, 2, 2);
+    color: rgb(121, 151, 76);
+    box-shadow: 5px 5px 0px rgb(121, 151, 76);
+    text-align: left;
+    margin: 10px;
+}
+.ButtonStyle:active{
+    transform: translate(2px ,2px);
+    box-shadow: 1px 1px 0px rgb(121, 151, 76);
+}

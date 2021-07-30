@@ -1,26 +1,30 @@
-import React ,{ useEffect }  from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 import IndianMap from './components/IndianMap/IndianMap';
-import { firstTestFunction,LokSabhaMembersStateWise, populatedLoksabhaMap} from "./Scripts/ColoringFunctions";
+import Heading from "./components/Heading/Heading"
+import ButtonColumns from "./components/ButtonColumns/ButtonColumns"
+import DataButtons from "./components/DataButtons/DataButtons"
+import { firstTestFunction, LokSabhaMembersStateWise, populatedLoksabhaMap, populateCybercrimeMap, cybercrimeColors } from "./Scripts/ColoringFunctions";
+import Particles from "react-particles-js"
 
 function App() {
 
   const [functionCounter, setFunctionCounter] = React.useState(0)
 
-  const functionHashMap = new Map([
-    [0, NaN],
-    [1, firstTestFunction],
-    [2, LokSabhaMembersStateWise]
-  ])
-  useEffect(()=>{populatedLoksabhaMap()},[])
+  const functionHashMap = [
+    { coloringFunction: NaN, title: "India" },
+    { coloringFunction: LokSabhaMembersStateWise, title: "Lok Sabha Members" },
+    { coloringFunction: cybercrimeColors, title: "Cyber Criems" }
+  ]
+  useEffect(() => { populatedLoksabhaMap() }, [])
+  useEffect(() => { populateCybercrimeMap() }, [])
   return (
     <div className="App" >
-      <IndianMap colorFunction={functionHashMap.get(functionCounter)} />
-      <button onClick={
-        () => {
-          setFunctionCounter((functionCounter + 1)%3)
-        }
-      }>ChangeColor</button>
+      <Particles  id="particalBachground" params={{"particles": {"number": {"value": 80,"density": {"enable": true,"value_area": 800}},"color": {"value": "#591414"},"shape": {"type": "circle","stroke": {"width": 0,"color": "#000000"},"polygon": {"nb_sides": 5},"image": {"src": "img/github.svg","width": 100,"height": 100}},"opacity": {"value": 0.5,"random": false,"anim": {"enable": false,"speed": 1,"opacity_min": 0.1,"sync": false}},"size": {"value": 3,"random": true,"anim": {"enable": false,"speed": 40,"size_min": 0.1,"sync": false}},"line_linked": {"enable": true, "distance": 126.26362266116361,"color": "#ff6464","opacity": 0.11048066982851817,"width": 1.1048066982851816},"move": {"enable": true,"speed": 6,"direction": "none", "random": false,"straight": false, "out_mode": "out","bounce": false,"attract": {"enable": false,"rotateX": 600,"rotateY": 1200}}},"interactivity": {"detect_on": "canvas","events": {"onhover": {"enable": true,"mode": "repulse"},"onclick": {"enable": true,"mode": "push"},"resize": true},"modes": {"grab": {"distance": 400,"line_linked": {"opacity": 1}},"bubble": {"distance": 400, "size": 40,"duration": 2,"opacity": 8,"speed": 3},"repulse": {"distance": 200,"duration": 0.4},"push": {"particles_nb": 4},"remove": {"particles_nb": 2}}},"retina_detect": true}}/>
+      
+      <Heading title={functionHashMap[functionCounter].title} />
+      <IndianMap colorFunction={functionHashMap[functionCounter].coloringFunction} />
+      <ButtonColumns buttonList={functionHashMap} counterSetFunction={setFunctionCounter} />
     </div>
   );
 }

@@ -1,9 +1,14 @@
 import { useEffect } from "react";
-import {loadLokSabhaData} from "./dataLoaders"
-import data from "../Scripts/loksabha_seats_statewise.csv";
+import lokSabahData from "../Datasets/loksabha_seats_statewise.csv";
+import cyberCrimeData from "../Datasets/cyber_crimes.csv";
 import {csv} from "d3";
 
 let maxMemberCount = 0
+let maxCyberCrimes = new Map([
+    ["2016",0],
+    ["2017",0],
+    ["2018",0],]
+);
 
 const stateCodeHashMap= new Map([
     ["IN-AN","Andaman and Nicobar Islands"],
@@ -84,18 +89,33 @@ const stateHashMap= new Map([
 ])
 
 let lokSambhamap = new Map();
+let cybercrimeMap = new Map();
 
-export function firstTestFunction(idOfState,counter,total) {
-    if(stateCodeHashMap.has(idOfState)){
-        let colors=[Math.round((counter/total)*255),Math.round((counter/total)*255),200]
-        return colors
-    }
-    return [0,0,0]
+
+
+
+
+
+//Poupulating Functions
+export function populateCybercrimeMap(){
+    csv(cyberCrimeData).then((data)=>{
+        data.forEach((element)=>{
+            console.log(element)
+            var stateName = element["State/UT"]
+            var sixtenCrimes = Number.parseInt(element["2016"])
+            var seventeenCrimes = Number.parseInt(element["2017"])
+            var eighteenCrimes = Number.parseInt(element["2018"])
+            maxCyberCrimes.set("2016",maxCyberCrimes.get("2016")>sixtenCrimes? maxCyberCrimes.get("2016"):sixtenCrimes)
+            maxCyberCrimes.set("2017",maxCyberCrimes.get("2017")>seventeenCrimes? maxCyberCrimes.get("2016"):seventeenCrimes)
+            maxCyberCrimes.set("2018",maxCyberCrimes.get("2018")>eighteenCrimes? maxCyberCrimes.get("2018"):eighteenCrimes)
+            cybercrimeMap.set(stateName,new Map([["2016",sixtenCrimes],["2017",seventeenCrimes],["2018",eighteenCrimes]]))
+        })
+    })
 }
 
+
 export function populatedLoksabhaMap(){
-    csv(data).then((d)=>{
-        console.log(d)
+    csv(lokSabahData).then((d)=>{
         stateCodeHashMap.forEach(stateName => {
             var memberCount = 0
             var partyMap = new Map()
@@ -119,6 +139,8 @@ export function populatedLoksabhaMap(){
 }
 
 
+
+//Coloring Functions
 export function LokSabhaMembersStateWise(idOfState){
     if (stateCodeHashMap.has(idOfState)) {
         let stateName = stateCodeHashMap.get(idOfState)
@@ -130,4 +152,26 @@ export function LokSabhaMembersStateWise(idOfState){
     }
     return [70,60,80]
     
+}
+
+
+export function firstTestFunction(idOfState) {
+    if(stateCodeHashMap.has(idOfState)){
+        let colors=[Math.round((150/200)*255),Math.round((56/100)*255),200]
+        return colors
+    }
+    return [0,0,0]
+}
+
+export function cybercrimeColors(idOfState){
+    if (stateCodeHashMap.has(idOfState)) {
+        let stateName = stateCodeHashMap.get(idOfState)
+        let stateData = cybercrimeMap.get(stateName)
+        let max = maxCyberCrimes.get("2016")
+        let val = stateData.get("2016")
+        let color = [150,0,Math.round((val/max)*255)]
+        console.log("State: "+stateName+"\nColor: "+color)
+        return color
+    }
+    return [0,0,0]
 }
