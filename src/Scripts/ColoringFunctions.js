@@ -106,7 +106,7 @@ export function populateCybercrimeMap(){
             var seventeenCrimes = Number.parseInt(element["2017"])
             var eighteenCrimes = Number.parseInt(element["2018"])
             maxCyberCrimes.set("2016",maxCyberCrimes.get("2016")>sixtenCrimes? maxCyberCrimes.get("2016"):sixtenCrimes)
-            maxCyberCrimes.set("2017",maxCyberCrimes.get("2017")>seventeenCrimes? maxCyberCrimes.get("2016"):seventeenCrimes)
+            maxCyberCrimes.set("2017",maxCyberCrimes.get("2017")>seventeenCrimes? maxCyberCrimes.get("2017"):seventeenCrimes)
             maxCyberCrimes.set("2018",maxCyberCrimes.get("2018")>eighteenCrimes? maxCyberCrimes.get("2018"):eighteenCrimes)
             cybercrimeMap.set(stateName,new Map([["2016",sixtenCrimes],["2017",seventeenCrimes],["2018",eighteenCrimes]]))
         })
@@ -141,7 +141,8 @@ export function populatedLoksabhaMap(){
 
 
 //Coloring Functions
-export function LokSabhaMembersStateWise(idOfState){
+export function LokSabhaMembersStateWise(params){
+    let idOfState = params[0]
     if (stateCodeHashMap.has(idOfState)) {
         let stateName = stateCodeHashMap.get(idOfState)
         let stateDate = lokSambhamap.get(stateName)
@@ -155,7 +156,8 @@ export function LokSabhaMembersStateWise(idOfState){
 }
 
 
-export function firstTestFunction(idOfState) {
+export function firstTestFunction(params) {
+    let idOfState = params[0]
     if(stateCodeHashMap.has(idOfState)){
         let colors=[Math.round((150/200)*255),Math.round((56/100)*255),200]
         return colors
@@ -163,12 +165,14 @@ export function firstTestFunction(idOfState) {
     return [0,0,0]
 }
 
-export function cybercrimeColors(idOfState){
+export function cybercrimeColors(params){
+    let idOfState = params[0]
+    let year = params[1]
     if (stateCodeHashMap.has(idOfState)) {
         let stateName = stateCodeHashMap.get(idOfState)
         let stateData = cybercrimeMap.get(stateName)
-        let max = maxCyberCrimes.get("2016")
-        let val = stateData.get("2016")
+        let max = maxCyberCrimes.get(year)
+        let val = stateData.get(year)
         let color = [150,0,Math.round((val/max)*255)]
         console.log("State: "+stateName+"\nColor: "+color)
         return color

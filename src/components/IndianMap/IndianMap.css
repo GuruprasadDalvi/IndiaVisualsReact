@@ -4,3 +4,11 @@
 path{
     transition: 350ms ease-in-out;
 }
+path:active{
+    border: none;
+    outline: none;
+}
+path:focus{
+    border: none;
+    outline: none;
+}
