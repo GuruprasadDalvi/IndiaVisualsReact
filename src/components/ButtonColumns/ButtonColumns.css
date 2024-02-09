@@ -3,7 +3,7 @@
     flex-direction: column;
     margin-left: 0;
     left: 0;
-    top: 0;
+    top: 50px;
     position: fixed;
     text-align: left;
 }
