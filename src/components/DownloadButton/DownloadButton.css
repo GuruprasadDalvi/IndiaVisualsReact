@@ -1,0 +1,23 @@
+
+
+.download{
+    text-align: left;
+    padding: 10px;
+    align-self: center;
+    font-family: 'Space Mono', monospace;
+    width: 70%;
+    font-weight: bold;
+    border: solid 2px black;
+    border-radius: 5px;
+    outline: none;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+    box-shadow: 2px 5px 15px rgba(0, 0, 0, 0.2);
+}

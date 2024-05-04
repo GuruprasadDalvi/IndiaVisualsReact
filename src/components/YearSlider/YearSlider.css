@@ -1,14 +1,26 @@
 .YearSlider {
-    position: fixed;
-    bottom: 0px;
-    bottom: 100px;
-    margin-left: 50px;
-    height: 10vh;
-    width: 40vw;
+    text-align: left;
+    padding: 10px;
+    align-self: center;
+    font-family: 'Space Mono', monospace;
+    width: 70%;
+    font-weight: bold;
+    border: solid 2px black;
+    border-radius: 5px;
+    outline: none;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    user-select: none;
+    text-decoration: none;
+    color: black;
+    box-shadow: 2px 5px 15px rgba(0, 0, 0, 0.2);
 }
 .track{
-    height: 10vh;
-    width: 40vw;
+    width: 70%;
     background-color: transparent;
 }
 input[type=range]{
@@ -16,8 +28,10 @@ input[type=range]{
 }
 
 input[type=range]::-webkit-slider-runnable-track {
-    background: rgb(119, 13, 13);
+    background: transparent;
+    border: 1px solid black;
     border-radius: 5px;
+    border-radius: 10px;
 }
 
 input[type=range]::-webkit-slider-thumb {
@@ -26,9 +40,8 @@ input[type=range]::-webkit-slider-thumb {
     height: 16px;
     width: 16px;
     border-radius: 50%;
-    background: goldenrod;
-    margin-top: -4px;
-    box-shadow: 0px 0px 10px rgb(245, 202, 95);
+    background: black;
+    cursor: pointer;
 }
 
 input[type=range]:focus {
@@ -36,13 +49,12 @@ input[type=range]:focus {
 }
 
 input[type=range]:focus::-webkit-slider-runnable-track {
-    background: rgb(119, 13, 13);
+    background: transparent;
 }
 
 .currentYear{
-    color: white;
+    color: black;
     text-align: center;
     margin-left: 10px;
-    font-size: x-large;
-    font-family: 'Kumar One', cursive;
+    font-family: 'Space Mono', monospace;
 }

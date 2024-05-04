@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Kumar+One&display=swap');
 .Heading {
-    font-family: 'Kumar One', cursive;
+    font-family: 'Space mono', monospace;
     font-weight: bolder;
-    text-shadow: 2px 2px 0px rgb(121, 151, 76);
-    font-size: xx-large;
-    color: rgb(88, 16, 16);
+    font-size: xxx-large;
+    color: rgb(0, 0, 0);
+    text-decoration: underline;
 }

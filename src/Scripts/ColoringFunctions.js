@@ -1,14 +1,11 @@
-import { useEffect } from "react";
-import lokSabahData from "../Datasets/loksabha_seats_statewise.csv";
-import cyberCrimeData from "../Datasets/cyber_crimes.csv";
-import {csv, max} from "d3";
-import { Random } from "tsparticles/Options/Classes/Random";
+// import { useEffect } from "react";
+import {csv} from "d3";
 
 let maxMemberCount = 0
 let maxCyberCrimes = new Map([
-    ["2016",0],
-    ["2017",0],
-    ["2018",0],]
+    ["2016",new Map()],
+    ["2017",new Map()],
+    ["2018",new Map()],]
 );
 
 const stateCodeHashMap= new Map([
@@ -99,7 +96,7 @@ let cybercrimeMap = new Map();
 
 //Poupulating Functions
 export function populateCybercrimeMap(){
-    csv(cyberCrimeData).then((data)=>{
+    csv("src/Datasets/cyber_crimes.csv").then((data)=>{
         data.forEach((element)=>{
             var stateName = element["State/UT"]
             var sixtenCrimes = Number.parseInt(element["2016"])
@@ -135,73 +132,93 @@ export function populateCybercrimeMap(){
             );
         })
     })
+    console.log("cybercrimeMap")
+    console.log(cybercrimeMap)
 }
 
 
 export function populatedLoksabhaMap(){
-    csv(lokSabahData).then((d)=>{
-        stateCodeHashMap.forEach(stateName => {
-            var memberCount = 0
-            var partyMap = new Map()
-            d.forEach(element => {
-              if(element.State == stateName){
-                memberCount++;
-                if (partyMap.has(element["Party Name"])){
-                    partyMap.set(element["Party Name"], partyMap.get(element["Party Name"])+1)
-                }
-                else{
-                    partyMap.set(element["Party Name"], 1)
-                }
-              } 
-            });
-            lokSambhamap.set(stateName,{memberCount: memberCount, partyMap:partyMap})
-            if (memberCount>maxMemberCount) {
-                maxMemberCount = memberCount;
+    csv("src/Datasets/loksabha_seats_statewise.csv").then((d)=>{
+        d.forEach(element=>{
+            const stateName = element.State;
+            const stateCode = stateHashMap.get(stateName) 
+            const partyName = element["Party Name"]
+
+            var stateMap = lokSambhamap.has(stateName)? lokSambhamap.get(stateName):new Map(Object.entries({name: stateName, code: stateCode, count: 0, details: new Map()}))
+            // var stateCount = stateMap.get("count");
+            stateMap.set("count", stateMap.get("count")+1)
+            var partyMap = stateMap.get("details");
+            partyMap.has(partyName)? partyMap.set(partyName,partyMap.get(partyName)+1):partyMap.set(partyName,1);
+            lokSambhamap.set(stateName, stateMap)
+
+            //setting maxCount 
+            if (stateMap.get("count")>maxMemberCount) {
+                maxMemberCount = stateMap.get("count");
             }
-        });
+
+
+        })
     })
 }
 
 
 //Coloring Function
-export function initialColoringFunction(params) {
-    let idOfState = params[0]
-    if(stateCodeHashMap.has(idOfState)){
-        let colors=[Math.round((150/200)*255),Math.round((56/100)*255),200]
-        return colors
+export function getInitialColors(params) {
+    let state_id = params[0]
+    if(stateCodeHashMap.has(state_id)){
+        let val = getColor(0.4)
+        let colors=[val,val,val]
+        return [colors,`<b style= "text-transform: uppercase">${stateCodeHashMap.get(state_id)}`]
     }
-    return [0,0,0]
+    return [[70,60,80],""]
 }
 
 //Coloring Function
-export function LokSabhaMembersStateWise(params){
-    let idOfState = params[0]
-    if (stateCodeHashMap.has(idOfState)) {
-        let stateName = stateCodeHashMap.get(idOfState)
-        let stateDate = lokSambhamap.get(stateName)
-        console.log(maxMemberCount)
-        let color = [150,0,Math.round((stateDate.memberCount/maxMemberCount)*255)]
-        console.log("State: "+stateName+"\nColor: "+color)
-        return color
+export function getLokSabhaMembersColors(params){
+    let state_id = params[0]
+    let stateName = stateCodeHashMap.get(state_id)
+    if (lokSambhamap.has(stateName)) {
+        let stateData = lokSambhamap.get(stateName)
+        // let stateData = new Map()
+        let totalCount = stateData.get("count")
+        let val = getColor(totalCount/maxMemberCount)
+        let color = [val,val,val]
+        let text = `<b style= "text-transform: uppercase">${stateName}</b><hr/>TOTAL MEMBERS: ${totalCount/2}`
+        stateData.get("details").forEach((value,key)=>{
+            text = text+`<br>${key.toLowerCase()}: ${value}`
+        })
+        return [color,text]
     }
-    return [70,60,80]
+    return [[70,60,80],""]
     
 }
 
 //Coloring Function
-export function cybercrimeColors(params){
-    let idOfState = params[0]
+export function getCyberCrimeColors(params){
+    let state_id = params[0]
     let year = params[1]
-    let color = [76,255, 255]
-    if (stateCodeHashMap.has(idOfState)) {
-        color = [Math.round(0.5*255),56, Math.round(0.5*255)]
-        let stateName = stateCodeHashMap.get(idOfState)
+    console.log("Year: "+year)
+    let color = [getColor(0.4),getColor(0.4), getColor(0.4)]
+    let stateName = ""
+    let text = ``
+    if (stateCodeHashMap.has(state_id)) {
+        stateName = stateCodeHashMap.get(state_id)
         let stateData = cybercrimeMap.get(stateName)
         let max = maxCyberCrimes.get(year) | 2639 
         let val = stateData.get(year)
-        let threshold = Math.round((val/max)*255)
+        let threshold = getColor(val/max)
+        text = text+`<b style= "text-transform: uppercase">${stateName}</b><hr/>TOTAL CYBER CRIMES: `+val
         if(threshold)
-            color = [0,100,threshold]
+            color = [threshold,threshold,threshold]
     }
-    return color;
+    return [color,text];
+}
+
+/**
+ * This function will convert given value of 0 to 1 range into 10,200 range
+ * @param {double} value 
+ */
+function getColor(value){
+
+   return Math.round((1-value)*100)
 }
