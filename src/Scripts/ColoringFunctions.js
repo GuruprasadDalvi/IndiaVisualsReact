@@ -1,5 +1,4 @@
 // import { useEffect } from "react";
-import {csv} from "d3";
 import cyber from "../Datasets/cyber_crimes.csv";
 import lokSabha from "../Datasets/loksabha_seats_statewise.csv";
 
@@ -98,9 +97,8 @@ let cybercrimeMap = new Map();
 
 //Poupulating Functions
 export function populateCybercrimeMap(){
-    csv(cyber).then((data)=>{
-        console.log(data)
-        data.forEach((element)=>{
+        cybercrimeMap = new Map();
+        cyber.forEach((element)=>{
             var stateName = element["State/UT"]
             var sixtenCrimes = Number.parseInt(element["2016"])
             var seventeenCrimes = Number.parseInt(element["2017"])
@@ -134,14 +132,12 @@ export function populateCybercrimeMap(){
               ])
             );
         })
-    })
 }
 
 
 export function populatedLoksabhaMap(){
-    csv(lokSabha).then((d)=>{
-        console.log(d)
-        d.forEach(element=>{
+        lokSambhamap = new Map();
+        lokSabha.forEach(element=>{
             const stateName = element.State;
             const stateCode = stateHashMap.get(stateName) 
             const partyName = element["Party Name"]
@@ -160,7 +156,6 @@ export function populatedLoksabhaMap(){
 
 
         })
-    })
 }
 
 
