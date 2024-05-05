@@ -99,6 +99,7 @@ let cybercrimeMap = new Map();
 //Poupulating Functions
 export function populateCybercrimeMap(){
     csv(cyber).then((data)=>{
+        console.log(data)
         data.forEach((element)=>{
             var stateName = element["State/UT"]
             var sixtenCrimes = Number.parseInt(element["2016"])
@@ -139,6 +140,7 @@ export function populateCybercrimeMap(){
 
 export function populatedLoksabhaMap(){
     csv(lokSabha).then((d)=>{
+        console.log(d)
         d.forEach(element=>{
             const stateName = element.State;
             const stateCode = stateHashMap.get(stateName) 
