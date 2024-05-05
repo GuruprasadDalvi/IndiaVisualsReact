@@ -1,5 +1,7 @@
 // import { useEffect } from "react";
 import {csv} from "d3";
+import cyber from "../Datasets/cyber_crimes.csv";
+import lokSabha from "../Datasets/loksabha_seats_statewise.csv";
 
 let maxMemberCount = 0
 let maxCyberCrimes = new Map([
@@ -96,7 +98,7 @@ let cybercrimeMap = new Map();
 
 //Poupulating Functions
 export function populateCybercrimeMap(){
-    csv("src/Datasets/cyber_crimes.csv").then((data)=>{
+    csv(cyber).then((data)=>{
         data.forEach((element)=>{
             var stateName = element["State/UT"]
             var sixtenCrimes = Number.parseInt(element["2016"])
@@ -132,13 +134,11 @@ export function populateCybercrimeMap(){
             );
         })
     })
-    console.log("cybercrimeMap")
-    console.log(cybercrimeMap)
 }
 
 
 export function populatedLoksabhaMap(){
-    csv("src/Datasets/loksabha_seats_statewise.csv").then((d)=>{
+    csv(lokSabha).then((d)=>{
         d.forEach(element=>{
             const stateName = element.State;
             const stateCode = stateHashMap.get(stateName) 
@@ -197,19 +197,22 @@ export function getLokSabhaMembersColors(params){
 export function getCyberCrimeColors(params){
     let state_id = params[0]
     let year = params[1]
-    console.log("Year: "+year)
     let color = [getColor(0.4),getColor(0.4), getColor(0.4)]
     let stateName = ""
     let text = ``
+    let val = false
     if (stateCodeHashMap.has(state_id)) {
         stateName = stateCodeHashMap.get(state_id)
         let stateData = cybercrimeMap.get(stateName)
         let max = maxCyberCrimes.get(year) | 2639 
-        let val = stateData.get(year)
+        val = stateData.get(year)
         let threshold = getColor(val/max)
         text = text+`<b style= "text-transform: uppercase">${stateName}</b><hr/>TOTAL CYBER CRIMES: `+val
         if(threshold)
             color = [threshold,threshold,threshold]
+    }
+    if(!val){
+        text = "move slider to update map"
     }
     return [color,text];
 }
